@@ -1,5 +1,7 @@
 #introduction to R data analysis: Data cleaning
 
+# need to organise this 
+
 #for loops
 head(base)
 
