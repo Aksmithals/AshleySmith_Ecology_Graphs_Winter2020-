@@ -1,7 +1,7 @@
-#Ashley Smith
+#Ashley SMith
 # 1/7/20
 #Processig MSH data for ecology course
-#last updated 12_7_20
+#last updated 11_7_20
 
 #
 ###
@@ -50,16 +50,6 @@ sum(species_year$Cirarv)
 sum(species_year$Hyprad)
 sum(species_year$Rumace)
 sum(species_year$Sensyl)
-
-
-#determinging richness via producing a datafram w/ t/f values
-#attempting to use transverse function did not work
-species_year_t=t(species_year)
-
-species_year_t$V1 > 0
-
-typeof(species_year_t)
-typeof(species_year)
 
 
 #did work using rowSums 
@@ -126,63 +116,10 @@ ggplot(species_plot_info_exotic_working, aes(x=YEAR, y=V5, colour=factor(PLOT_NU
   facet_grid(PLOT_NAME~.)+
   labs(x= "YEAR", title= "richness depedant on year for exotic plants")
 
-#using tidyverse and dplyr: did not work 
-species_year_exotic= select()
-install.packages("tidyverse")
-install.packages("rlang")
-library(dplyr)
-library(tidyverse)
-
-
-?select
-
-speces_year %>% select(1:3)
-
-structure_year_working= structure_year[ structure_year$PLOT_NAME %in% c( "LAHR", "PICA", "PICB", "PUPL", "STRD"),]
-
-
 
 #
 ###
 #working with structure_year
-SS1= subset(structure_year,PLOT_NAME=="PICE")
-SS2=subset(SS1,PLOT_NUMBER== "4")
-
-head(SS2)
-
-#
-###
-#looking for nice plots usig in built plot function 
-plot(SS2$YEAR, SS2$RICHNESS, xlab="year", 
-     ylab ="richness", 
-     main = "measureing vegtation sucession", 
-     col ="blue",
-     pch=19)
-
-lines(SC$YEAR, SC$RICHNESS, xlab="year", 
-     ylab ="richness", 
-     main = "measureing vegtation sucession", 
-     col ="blue",
-     pch=19)
-plot(SC$YEAR, SC$COVER_., col="red", pch=19)
-plot(SC$YEAR, SC$HPRIME, col="green", pch=19)
-plot(SC$YEAR, SC$EVENNESS, col="orange", pch=19)
-plot(SC$YEAR, SC$FREQUENCY, col="pink", pch=19)
-
-
-head(structure_year)
-f=unique(structure_year$PLOT_NAME)
-
-dput(unique(structure_year$PLOT_NAME))
-colnames(structure_year)
-
-?apply
-apply(structure_year,f,mean)
-str(structure_year)
-
-#
-###
-#structure_year using ggplot to make plots
 
 install.packages("ggplot2")
 library(ggplot2)
@@ -204,11 +141,6 @@ ggplot(structure_year, aes(x=YEAR, y=RICHNESS, colour=factor(PLOT_NUMBER)))+
   theme_bw()+
   facet_grid(PLOT_NAME~PLOT_NUMBER)+
   labs(x= "YEAR", title= "richness depedant on year")
-
-#subsetting ad removing rows 
-
-#structure_year_working with missing data
-structure_year_working= structure_year[ structure_year$PLOT_NAME %in% c( "BUCA", "BUCB", "BUCC", "BUCD", "LAHR", "PICA", "PICB", "PUPL", "STRD"),]
 
 #structure_year_working with good curves 
 structure_year_working= structure_year[ structure_year$PLOT_NAME %in% c( "LAHR", "PICA", "PICB", "PUPL", "STRD"),]
