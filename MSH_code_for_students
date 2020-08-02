@@ -1,0 +1,128 @@
+#Ashley SMith
+# 2_8_20
+#Deisgning a seminar for Ecology Students 
+#last updated 2_8_20
+
+#Different skills required/ learn
+
+##Section I
+# importanting data
+# installing and using libraries
+# viewing info about data (nrow, ncol, head, etc)
+# using ggplot and geoms 
+
+#Section II
+# subsetting data
+# using TRUE/FALSE arguments and couting these as 1 and 0 s
+
+#
+###
+#introduction to r 
+getwd()
+setwd()
+
+#
+###
+#Plotting already calcalated data 
+
+#importing and exploring data 
+structure_year_eco = read.csv("msh_structure_year_eco.csv", header=TRUE, sep = ",")
+
+head(structure_year_eco)
+ncol(structure_year_eco)
+nrow(structure_year_eco)
+colnames(structure_year_eco)
+
+install.packages("tidyr")
+library(tidyr)
+library(ggplot2)
+
+#plotting Richness, evenness, cover, Hprime and frequency 
+#richness
+ggplot(structure_year_eco, aes(x=YEAR, y=RICHNESS, colour=factor(PLOT_NUMBER)))+ 
+  geom_point()+
+  theme_bw()+
+  facet_grid(PLOT_NAME~.)+
+  labs(x= "YEAR", title= "RICHNESS depedant on year based on structure_year")
+
+#eveness
+ggplot(structure_year_eco, aes(x=YEAR, y=EVENNESS, colour=factor(PLOT_NUMBER)))+ 
+  geom_point()+
+  theme_bw()+
+  facet_grid(PLOT_NAME~.)+
+  labs(x= "YEAR", title= "EVENNESS depedant on year based on structure_year")
+
+#1-eveness
+#as eveness has 1 which is no diversity and o as infinate diveristy so by using 1-eveness 0 is no diveristy and 1 is infinite diveristy 
+ggplot(structure_year_eco, aes(x=YEAR, y=(1-EVENNESS), colour=factor(PLOT_NUMBER)))+ 
+  geom_point()+
+  theme_bw()+
+  facet_grid(PLOT_NAME~.)+
+  labs(x= "YEAR", title= "EVENNESS depedant on year based on structure_year")
+
+#cover
+ggplot(structure_year_eco, aes(x=YEAR, y=COVER_., colour=factor(PLOT_NUMBER)))+ 
+  geom_point()+
+  theme_bw()+
+  facet_grid(PLOT_NAME~.)+
+  labs(x= "YEAR", title= "COVER depedant on year based on structure_year")
+
+#Hprime
+ggplot(structure_year_eco, aes(x=YEAR, y=HPRIME, colour=factor(PLOT_NUMBER)))+ 
+  geom_point()+
+  theme_bw()+
+  facet_grid(PLOT_NAME~.)+
+  labs(x= "YEAR", title= "HPRIME depedant on year based on structure_year")
+
+#frequency
+ggplot(structure_year_eco, aes(x=YEAR, y=FREQUENCY, colour=factor(PLOT_NUMBER)))+ 
+  geom_point()+
+  theme_bw()+
+  ylim(0,40)+
+  facet_grid(PLOT_NAME~.)+
+  labs(x= "YEAR", title= "FREQUENCY depedant on year based on structure_year")
+
+
+#
+###
+# calculating measurements of diveristy from the base data 
+species_year= read.csv("MSH_SPECIES_PLOT_YEAR.csv", header=TRUE, sep = ",")
+head(species_year)
+
+# calculating and plotting richness 
+nrow(species_year)
+
+species_plot_info= species_year[,1:4]
+rich_sum= rowSums(species_year[,5:50]>0) # could do the otherversion of simp indedx by -1 from this 
+species_plot_info[,5] =rich_sum
+head(species_plot_info)
+
+species_plot_info_working= species_plot_info[ species_plot_info$PLOT_NAME %in% c( "LAHR", "PICA", "PICB", "PUPL", "STRD"),]
+
+ggplot(species_plot_info_working, aes(x=YEAR, y=V5, colour=factor(PLOT_NUMBER)))+ 
+  geom_point()+
+  theme_bw()+
+  facet_grid(PLOT_NAME~.)+
+  labs(x= "YEAR", title= "richness depedant on year based on species_year (calculated from plant data")
+
+#calciulating and plotting simpson's index 
+
+species_plot_info_simp= species_plot_info
+species_plot_info_simp[,5] = (rich_sum/85)^2
+
+species_plot_info_simp_working= species_plot_info_simp[ species_plot_info$PLOT_NAME %in% c( "LAHR", "PICA", "PICB", "PUPL", "STRD"),]
+
+
+ggplot(species_plot_info_simp_working, aes(x=YEAR, y=V5, colour=factor(PLOT_NUMBER)))+ 
+  geom_point()+
+  theme_bw()+
+  facet_grid(PLOT_NAME~.)+
+  labs(x= "YEAR", title= "richness depedant on year")
+
+#calculating H prime (Shannon-Wiener dviersity index)
+
+#calculating eveness 
+
+
+
+
