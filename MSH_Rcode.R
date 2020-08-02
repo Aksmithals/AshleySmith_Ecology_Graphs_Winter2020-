@@ -1,7 +1,12 @@
 #Ashley SMith
 # 1/7/20
 #Processig MSH data for ecology course
-#last updated 11_7_20
+#last updated 2_8_20
+
+#
+###
+#importing libraries 
+library(tidyr)
 
 #
 ###
@@ -51,6 +56,7 @@ sum(species_year$Hyprad)
 sum(species_year$Rumace)
 sum(species_year$Sensyl)
 
+ncol(species_year)
 
 #did work using rowSums 
 nrow(species_year)
@@ -59,6 +65,21 @@ species_plot_info= species_year[,1:4]
 rich_sum= rowSums(species_year[,5:50]>0)
 species_plot_info[,5] =rich_sum
 head(species_plot_info)
+
+#using simpson diveristy index 
+species_plot_info_simp= species_plot_info
+species_plot_info_simp[,5] = (rich_sum/85)^2
+
+species_plot_info_simp_working= species_plot_info_simp[ species_plot_info$PLOT_NAME %in% c( "LAHR", "PICA", "PICB", "PUPL", "STRD"),]
+
+
+ggplot(species_plot_info_simp_working, aes(x=YEAR, y=V5, colour=factor(PLOT_NUMBER)))+ 
+  geom_point()+
+  theme_bw()+
+  facet_grid(PLOT_NAME~.)+
+  labs(x= "YEAR", title= "richness depedant on year")
+
+
 
 #plotting species_year produced richness 
 
@@ -124,8 +145,35 @@ ggplot(species_plot_info_exotic_working, aes(x=YEAR, y=V5, colour=factor(PLOT_NU
 install.packages("ggplot2")
 library(ggplot2)
 
-#
+write.csv(structure_year_working, file= "msh_structure_year_eco.csv") 
+
 ##
+#
+#Based on eveness 
+ggplot(structure_year_working, aes(x=YEAR, y=EVENNESS, colour=factor(PLOT_NUMBER)))+ 
+  geom_point()+
+  theme_bw()+
+  facet_grid(PLOT_NAME~.)+
+  labs(x= "YEAR", title= "EVENESS depedant on year based on structure_year")
+
+#caclulating richness/ eveness
+even_rich= structure_year_working$RICHNESS/structure_year_working$EVENNESS
+
+ncol(structure_year_working)
+structure_year_working[,10] =even_rich
+
+#graphing richness/ eveness 
+ggplot(structure_year_working, aes(x=YEAR, y=V10, colour=factor(PLOT_NUMBER)))+ 
+  geom_point()+
+  theme_bw()+
+  ylim(0,50)+
+  facet_grid(PLOT_NAME~.)+
+  labs(x= "YEAR", title= "Richness/ eveness depedant on year based on structure_year")
+
+#caqlcaulating the proper shannon index 
+
+##
+#
 #grid based on richness
 
 #by plot name
